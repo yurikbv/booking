@@ -163,35 +163,57 @@ var nearItems = [{
 ];
 var map = document.querySelector('.map');
 var mapPins = map.querySelector('.map__pins');
-map.classList.remove('map--faded');
 var mapTemplate = document.querySelector('template').content;
-var mapTemplateCard = document.querySelector('template').content.querySelector('.map__card').cloneNode(true);
 
 function renderHouses(houses) {
-  var houseElement = mapTemplate.cloneNode(true);
-  houseElement.querySelector('.map__pin').style.left = houses.location.x + houseElement.querySelector('.map__pin').getAttribute('width') + 'px';
-  houseElement.querySelector('.map__pin').style.top = houses.location.y + houseElement.querySelector('.map__pin').getAttribute('height') + 'px';
-  houseElement.querySelector('.map__pin').querySelector('img').setAttribute('src', houses.author.avatar);
+  var houseElement = mapTemplate.querySelector('.map__pin').cloneNode(true);
+  houseElement.style.left = houses.location.x + houseElement.getAttribute('width') + 'px';
+  houseElement.style.top = houses.location.y + houseElement.getAttribute('height') + 'px';
+  houseElement.querySelector('img').setAttribute('src', houses.author.avatar);
   return houseElement;
 }
 var fragment = document.createDocumentFragment();
 for (var i = 0; i < nearItems.length; i++){
   fragment.appendChild(renderHouses(nearItems[i]));
 }
-mapPins.appendChild(fragment);
-var firtsItems = nearItems[0];
+var mapTemplateCard = document.querySelector('template').content.querySelector('.map__card');
 var featureBlock = mapTemplateCard.querySelector('.popup__features');
-mapTemplateCard.querySelector('h3').textContent = firtsItems.offer.title;
-mapTemplateCard.querySelector('small').textContent = firtsItems.location.x + ' ' + firtsItems.location.y + '  Tōkyō-to, Chiyoda-ku, Ichibanchō, 14−3';
-mapTemplateCard.querySelector('.popup__price').innerHTML = firtsItems.offer.price + '&#x20bd;/ночь';
-mapTemplateCard.querySelector('h4').textContent = (firtsItems.offer.type === 'flat') ? 'Квартира' : (firtsItems.offer.type === 'house') ? 'Дом' : 'Бунгало';
-mapTemplateCard.children[6].textContent = firtsItems.offer.rooms + ' комнаты для ' + firtsItems.offer.guests + ' гостей';
-mapTemplateCard.children[7].textContent = 'Заезд после ' + firtsItems.offer.checkin  + ' выезд до ' + firtsItems.offer.checkout;
-for (i = featureBlock.children.length; i - firtsItems.offer.features.length > 0 ; i--){
-  featureBlock.removeChild(featureBlock.children[i - 1])
+
+function renderOtherHouses(houses) {
+  mapTemplateCard = mapTemplateCard.cloneNode(true);
+  mapTemplateCard.querySelector('h3').textContent = houses.offer.title;
+  mapTemplateCard.querySelector('small').textContent = houses.location.x + ' ' + houses.location.y + '  Tōkyō-to, Chiyoda-ku, Ichibanchō, 14−3';
+  mapTemplateCard.querySelector('.popup__price').innerHTML = houses.offer.price + '&#x20bd;/ночь';
+  mapTemplateCard.querySelector('h4').textContent = (houses.offer.type === 'flat') ? 'Квартира' : (houses.offer.type === 'house') ? 'Дом' : 'Бунгало';
+  mapTemplateCard.children[6].textContent = houses.offer.rooms + ' комнаты для ' + houses.offer.guests + ' гостей';
+  mapTemplateCard.children[7].textContent = 'Заезд после ' + houses.offer.checkin  + ' выезд до ' + houses.offer.checkout;
+  for (i = featureBlock.children.length; i - houses.offer.features.length > 0 ; i--){
+    featureBlock.removeChild(featureBlock.children[i - 1])
+  }
+  mapTemplateCard.children[9].textContent = houses.offer.description;
+  mapTemplateCard.querySelector('.popup__avatar').setAttribute('src', houses.author.avatar);
+  return mapTemplateCard;
 }
-mapTemplateCard.children[9].textContent = firtsItems.offer.description;
-mapTemplateCard.querySelector('.popup__avatar').setAttribute('src', firtsItems.author.avatar);
-map.appendChild(mapTemplateCard);
+var naticeForm = document.querySelector('.notice__form');
+var fields = naticeForm.querySelectorAll('fieldset');
+function addRemoveDisabledForm(fields) {
+  for(i = 0;i < fields.length; i++){
+    if(fields[i].hasAttribute('disabled')){
+      fields[i].removeAttribute('disabled','disabled');
+    } else fields[i].setAttribute('disabled','disabled');
+  }
+}
+var myPin = map.querySelector('.map__pin--main');
+myPin.addEventListener('mouseup', function () {
+  map.classList.remove('map--faded');
+  mapPins.appendChild(fragment);
+  naticeForm.classList.remove('notice__form--disabled');
+  addRemoveDisabledForm(fields)
+});
+addRemoveDisabledForm(fields);
+renderOtherHouses(nearItems[0]);
+// map.appendChild(mapTemplateCard);
+
+// console.log(myPin);
 
 
