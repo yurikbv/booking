@@ -1,282 +1,98 @@
 'use strict';
 
-var getRandomNumber = function (max,min) {
-  return Math.floor((min || 0) + Math.random() * max)
-};
+(function () {
 
-var getRandomFeatures = function () {
-  var features = ["wifi", "dishwasher", "parking", "washer", "elevator", "conditioner"];
-  features.length = getRandomNumber(features.length,1);
-  return features;
-};
+  var map = document.body.querySelector('.map');
+  var myPin = map.querySelector('.map__pin--main');
 
-
-var ads = [{
-  author: {
-    avatar: 'img/avatars/user01.png'
-  },
-  offer: {
-    title: 'Большая уютная квартира',
-    address: '{{location.x}}, {{location.y}}',
-    price: getRandomNumber(1000000,1000),
-    type: 'flat',
-    rooms: getRandomNumber(5,1),
-    guests: getRandomNumber(5),
-    checkin: '12:00',
-    checkout: '12:00',
-    features: getRandomFeatures(),
-    description: '',
-    photos: []
-  },
-  location: {
-    x: getRandomNumber(900,300),
-    y: getRandomNumber(500,100)
-  }
-},{
-  author: {
-    avatar: 'img/avatars/user02.png'
-  },
-  offer: {
-    title: 'Маленькая неуютная квартира',
-    address: '{{location.x}}, {{location.y}}',
-    price: getRandomNumber(1000000,1000),
-    type: 'flat',
-    rooms: getRandomNumber(5,1),
-    guests: getRandomNumber(5),
-    checkin: '13:00',
-    checkout: '13:00',
-    features: getRandomFeatures(),
-    description: '',
-    photos: []
-  },
-  location: {
-    x: getRandomNumber(900,300),
-    y: getRandomNumber(500,100)
-  }
-},{
-  author: {
-    avatar: 'img/avatars/user03.png'
-  },
-  offer: {
-    title: 'Огромный прекрасный дворец',
-    address: '{{location.x, {{location.y}}',
-    price: getRandomNumber(1000000,1000),
-    type: 'house',
-    rooms: getRandomNumber(5,1),
-    guests: getRandomNumber(5),
-    checkin: '14:00',
-    checkout: '14:00',
-    features: getRandomFeatures(),
-    description: '',
-    photos: []
-  },
-  location: {
-    x: getRandomNumber(900,300),
-    y: getRandomNumber(500,100)
-  }
-},{
-  author: {
-    avatar: 'img/avatars/user04.png'
-  },
-  offer: {
-    title: 'Маленький ужасный дворец',
-    address: '{{location.x}}, {{location.y}}',
-    price: getRandomNumber(1000000,1000),
-    type: 'house',
-    rooms: getRandomNumber(5,1),
-    guests: getRandomNumber(5),
-    checkin: '12:00',
-    checkout: '12:00',
-    features: getRandomFeatures(),
-    description: '',
-    photos: []
-  },
-  location: {
-    x: getRandomNumber(900,300),
-    y: getRandomNumber(500,100)
-  }
-},{
-  author: {
-    avatar: 'img/avatars/user05.png'
-  },
-  offer: {
-    title: 'Красивый гостевой домик',
-    address: '{{location.x}}, {{location.y}}',
-    price: getRandomNumber(1000000,1000),
-    type: 'house',
-    rooms: getRandomNumber(5,1),
-    guests: getRandomNumber(5),
-    checkin: '14:00',
-    checkout: '14:00',
-    features: getRandomFeatures(),
-    description: '',
-    photos: []
-  },
-  location: {
-    x: getRandomNumber(900,300),
-    y: getRandomNumber(500,100)
-  }
-},{
-  author: {
-    avatar: 'img/avatars/user06.png'
-  },
-  offer: {
-    title: 'Некрасивый негостеприимный домик',
-    address: '{{location.x}}, {{location.y}}',
-    price: getRandomNumber(1000000,1000),
-    type: 'house',
-    rooms: getRandomNumber(5,1),
-    guests: getRandomNumber(5),
-    checkin: '13:00',
-    checkout: '13:00',
-    features: getRandomFeatures(),
-    description: '',
-    photos: []
-  },
-  location: {
-    x: getRandomNumber(900,300),
-    y: getRandomNumber(500,100)
-  }
-},{
-  author: {
-    avatar: 'img/avatars/user07.png'
-  },
-  offer: {
-    title: 'Уютное бунгало далеко от моря',
-    address: '{{location.x}}, {{location.y}}',
-    price: getRandomNumber(1000000,1000),
-    type: 'bungalo',
-    rooms: getRandomNumber(5,1),
-    guests: getRandomNumber(5,1),
-    checkin: '12:00',
-    checkout: '12:00',
-    features: getRandomFeatures(),
-    description: '',
-    photos: []
-  },
-  location: {
-    x: getRandomNumber(900,300),
-    y: getRandomNumber(500,130)
-  }
-},{
-  author: {
-    avatar: 'img/avatars/user08.png'
-  },
-  offer: {
-    title: 'Неуютное бунгало по колено в воде',
-    address: '{{location.x}}, {{location.y}}',
-    price: getRandomNumber(1000000,1000),
-    type: 'bungalo',
-    rooms: getRandomNumber(5,1),
-    guests: getRandomNumber(5),
-    checkin: '12:00',
-    checkout: '12:00',
-    features: getRandomFeatures(),
-    description: '',
-    photos: []
-  },
-  location: {
-    x: getRandomNumber(900,300),
-    y: getRandomNumber(500,100)
-  }
-}];
-
-var map = document.body.querySelector('.map');
-var mapPins = document.querySelector('.map__pins');
-var mapPinMain = document.querySelector('.map__pin--main');
-var noticeForm = document.querySelector('.notice__form');
-
-var templatePins = document.body.querySelector('template').content.querySelector('.map__pin');
-var templateCards = document.body.querySelector('template').content.querySelector('.map__card');
-var fragmentPins = document.createDocumentFragment();
-
-var renderPin = function(pin){
-  var clone = templatePins.cloneNode(true);
-  clone.style.left = pin.location.x - 20 + 'px';
-  clone.style.top = pin.location.y - 29 + 'px';
-  clone.querySelector('img').src = pin.author.avatar;
-  return clone;
-};
-
-var renderCard = function (obj) {
-  var getCountFeatures = function (features,length) {
-    for(var i = features.children.length;i > length; i--){
-      features.removeChild(features.lastElementChild)
-    }
-    return features.innerHTML;
+  var foundActivePin = function(){
+    map.querySelector('.map__pin--active').classList.remove('map__pin--active')
   };
-  var clone = templateCards.cloneNode(true);
-  var features = clone.querySelector('.popup__features');
-  clone.querySelector('.popup__avatar').src = obj.author.avatar;
-  clone.querySelector('h3').textContent = obj.offer.title;
-  clone.querySelector('p > small').textContent = obj.offer.address;
-  clone.querySelector('.popup__price').innerHTML = obj.offer.price + '&#x20bd;/ночь';
-  clone.querySelector('h4').textContent = obj.offer.type;
-  clone.children[6].textContent = obj.offer.rooms + ' для ' + obj.offer.guests + ' гостей';
-  clone.children[7].textContent = 'Заезд после ' + obj.offer.checkin + ', выезд до ' + obj.offer.checkout;
-  clone.children[9].textContent = obj.offer.description;
-  features.innerHTML = getCountFeatures(features,obj.offer.features.length);
-  return clone;
-};
 
-var renderPins = function(){
-  for(var i = 0;i < ads.length;i++){
-    fragmentPins.appendChild(renderPin(ads[i]))
-  }
-  return fragmentPins;
-};
-
-var showPins = function () {
-  map.classList.remove('map--faded');
-  mapPins.appendChild(renderPins());
-  noticeForm.classList.remove('notice__form--disabled');
-  mapPinMain.removeEventListener('mouseup',showPins);
-};
-
-mapPinMain.addEventListener('mouseup',showPins);
-
-var foundActivePin = function(){
-  map.querySelector('.map__pin--active').classList.remove('map__pin--active')
-};
-
-var foundNumberActivePin = function(){
-  var mapPins = document.querySelectorAll('.map__pin');
-  for(var i = 0;i < mapPins.length; i++) {
-    if (mapPins[i].classList.contains('map__pin--active')){
-      return --i
+  var foundNumberActivePin = function(){
+    var mapPins = document.querySelectorAll('.map__pin');
+    for(var i = 0;i < mapPins.length; i++) {
+      if (mapPins[i].classList.contains('map__pin--active')){
+        return --i
+      }
     }
-  }
-};
+  };
 
-var removeCard = function () {
-  map.removeChild(map.querySelector('.map__card.popup'))
-};
+  var removeCard = function () {
+    map.removeChild(map.querySelector('.map__card.popup'))
+  };
 
-var onEscPress = function (event) {
-  if (event.keyCode === 27) removeCard();
-  document.removeEventListener('keydown',onEscPress);
-};
+  var onEscPress = function (event) {
+    window.util.isEscEvent(event,removeCard);
+    document.removeEventListener('keydown',onEscPress);
+  };
 
-var openPopup = function(){
-  map.appendChild(renderCard(ads[foundNumberActivePin()]));
-  var popupClose = document.querySelector('.popup__close');
-  popupClose.addEventListener('click',removeCard);
-  popupClose.addEventListener('keydown',function (evt) {
-    if(evt.keyCode === 13) removeCard()
+  var openPopup = function(target){
+    if(target.classList.contains('map__pin--main')){
+      return false;
+    } else map.appendChild(window.card.renderCard(window.data.ads[foundNumberActivePin()]));
+    var popupClose = document.querySelector('.popup__close');
+    popupClose.addEventListener('click',removeCard);
+    popupClose.addEventListener('keydown',function (evt) {
+      window.util.isEnterEvent(evt,removeCard);
+    });
+    document.addEventListener('keydown',onEscPress)
+  };
+
+  map.addEventListener('click',function (evt) {
+    var target = evt.target;
+    if(target.closest('.map__pin')){
+      if(map.querySelector('.map__pin--active')){
+        foundActivePin();
+      }
+      target.closest('.map__pin').classList.add('map__pin--active');
+      if(map.querySelector('.map__card.popup')) removeCard();
+      openPopup(target.closest('.map__pin'));
+    }
   });
-  document.addEventListener('keydown',onEscPress)
-};
 
-map.addEventListener('click',function (evt) {
-  var target = evt.target;
-  if(target.closest('.map__pin')){
-    if(map.querySelector('.map__pin--active')){
-      foundActivePin();
-    }
-    target.closest('.map__pin').classList.add('map__pin--active');
-    if(map.querySelector('.map__card.popup')) removeCard();
-    openPopup();
-  }
-});
+  //  Move myself Pin
+  myPin.addEventListener('mousedown',function (event) {
+    event.preventDefault();
+    var target = event.target.closest('.map__pin--main');
+    var getCoords = function (element) {
+      var box = element.getBoundingClientRect();
+      return{
+        left: box.left + pageXOffset,
+        top: box.top + pageYOffset
+      }
+    };
+    var myPinCoords = getCoords(target);
+    var shiftX = event.pageX - myPinCoords.left;
+    var shiftY = event.pageY - myPinCoords.top;
 
+    var moveAt = function (event) {
+      var left = event.pageX - shiftX;
+      var top = event.pageY - shiftY;
+      myPin.style.left = Math.max(map.getBoundingClientRect().left,left + myPin.offsetWidth/2 - 31.6) + 'px';
+      myPin.style.top = Math.max(100,top + myPin.offsetHeight/2) + 'px';
+      if(left + myPin.offsetWidth > map.getBoundingClientRect().right){
+        myPin.style.left = map.getBoundingClientRect().right - myPin.offsetWidth + 'px';
+      }
+      if(top - myPin.offsetHeight/2 - 18 > 500) {
+        myPin.style.top = 500 + myPin.offsetHeight + 18 + 'px'
+      }
+      document.body.querySelector('#address').value = 'x: ' + parseInt(myPin.getBoundingClientRect().left + pageXOffset)
+          + ' y: ' + parseInt(myPin.getBoundingClientRect().top + myPin.offsetHeight/2 + 18 + pageYOffset)
+    };
+    
+    var mouseMove = function (eventMove) {
+      eventMove.preventDefault();
+      moveAt(eventMove);
+    };
+    var mouseUp = function (eventUp) {
+      eventUp.preventDefault();
+      document.removeEventListener('mousemove',mouseMove);
+      document.removeEventListener('mouseup',mouseUp);
+    };
 
+    moveAt(event);
+    document.addEventListener('mousemove',mouseMove);
+    document.addEventListener('mouseup',mouseUp);
+  });
+})();
