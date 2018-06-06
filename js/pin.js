@@ -6,9 +6,17 @@
   var mapPins = document.querySelector('.map__pins');
   var noticeForm = document.querySelector('.notice__form');
   var map = document.body.querySelector('.map');
-  var mapPinMain = document.querySelector('.map__pin--main');
+
 
   window.pin = {
+    showErrorMessage: function(message){
+      var div = document.createElement('div');
+      div.cssText = 'margin: 0 auto; background-color: red; z-index: 100; position: absolute; left: 0; right: 0; padding: 5px;';
+      div.style.textAlign = 'center';
+      div.style.fontSize = '30px';
+      div.textContent = message;
+      document.body.insertAdjacentElement('afterbegin',div);
+    },
     renderPin: function(pin){
       var clone = templatePins.cloneNode(true);
       clone.style.left = pin.location.x  + 'px';
@@ -16,20 +24,16 @@
       clone.querySelector('img').src = pin.author.avatar;
       return clone;
     },
-    renderPins: function(){
-      for(var i = 0;i < window.data.ads.length;i++){
-        fragmentPins.appendChild(window.pin.renderPin(window.data.ads[i]))
+    renderPins: function(ads){
+      for(var i = 0;i < ads.length ;i++){
+        fragmentPins.appendChild(window.pin.renderPin(ads[i]))
       }
-      return fragmentPins;
+      mapPins.appendChild(fragmentPins);
     },
     showPins: function () {
       map.classList.remove('map--faded');
-      mapPins.appendChild(window.pin.renderPins());
+      window.backend.load(window.pin.renderPins,window.pin.showErrorMessage);
       noticeForm.classList.remove('notice__form--disabled');
-      mapPinMain.removeEventListener('mouseup',window.pin.showPins);
     }
   };
-
-  mapPinMain.addEventListener('mouseup',window.pin.showPins);
-
 })();

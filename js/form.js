@@ -9,6 +9,7 @@
   var price = form.querySelector('#price');
   var roomNumber = form.querySelector('#room_number');
   var capacity = form.querySelector('#capacity');
+  var features = form.querySelectorAll('.form__element.features input');
 
   timeIn.addEventListener('change',function (event) {
     timeOut.selectedIndex = event.target.selectedIndex;
@@ -58,4 +59,24 @@
 
   defaultType();
   defaultCapacity();
+
+  var defaultForm = function(){
+    form.querySelector('#title').value = '';
+    form.querySelector('#address').value = '';
+    form.querySelector('#description').value = '';
+    type.selectedIndex = 0;
+    timeIn.selectedIndex = 0;
+    timeOut.selectedIndex = 0;
+    roomNumber.selectedIndex = 0;
+    capacity.selectedIndex = 2;
+    price.value = '';
+    for(var i = 0; i < features.length; i++){
+        features[i].checked = false
+    }
+  };
+
+  form.addEventListener('submit',function (event) {
+    window.backend.save(new FormData(form),defaultForm,window.pin.showErrorMessage);
+    event.preventDefault();
+  })
 })();
