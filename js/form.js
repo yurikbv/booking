@@ -44,7 +44,7 @@
       capacity.options[0].disabled = capacity.options[1].disabled = capacity.options[2].disabled = false;
     } else if(roomNumber.value === '100'){
       capacity.options[3].selected = true;
-      capacity.options[0].disabled = capacity.options[1].disabled = capacity.options[2].disabled = true
+      capacity.options[0].disabled = capacity.options[1].disabled = capacity.options[2].disabled = true;
       capacity.options[3].disabled = false;
     }
   };

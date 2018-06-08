@@ -7,6 +7,49 @@
   var noticeForm = document.querySelector('.notice__form');
   var map = document.body.querySelector('.map');
 
+  var filterType = document.querySelector('#housing-type');
+  var filterPrice = document.querySelector('#housing-price');
+  var filterRooms = document.querySelector('#housing-rooms');
+  var filterQuests = document.querySelector('#housing-guests');
+
+  window.dataPins = [];
+
+  var cleanPins = function(pins){
+    pins.forEach(function (item) {
+      mapPins.removeChild(item);
+    })
+  };
+
+  var verifedPrice = function (value) {
+    if (filterPrice.value === 'middle' && value >= 1000 && value <= 50000) {return true}
+    if (filterPrice.value === 'low' && value <= 1000) {return true}
+    if (filterPrice.value === 'high' && value > 50000) {return true}
+  };
+
+  var filterPins = function(){
+    window.newData = [];
+    window.newData = window.dataPins.filter(function (value) {
+      return ((value.offer.type === filterType.value || filterType.value === 'any') && (verifedPrice(value.offer.price) || filterPrice.value === 'any') &&
+          (value.offer.rooms === +filterRooms.value || filterRooms.value === 'any') && (value.offer.guests === +filterQuests.value || filterQuests.value === 'any'));
+    });
+    window.pin.renderPins(window.newData)
+  };
+
+  filterType.addEventListener('change',function () {
+    filterPins();
+  });
+
+  filterPrice.addEventListener('change',function () {
+    filterPins();
+  });
+
+  filterRooms.addEventListener('change',function () {
+    filterPins();
+  });
+
+  filterQuests.addEventListener('change',function () {
+    filterPins();
+  });
 
   window.pin = {
     showErrorMessage: function(message){
@@ -25,15 +68,22 @@
       return clone;
     },
     renderPins: function(ads){
+      if(mapPins.querySelectorAll('.map__pin')) cleanPins(mapPins.querySelectorAll('.map__pin'));
       for(var i = 0;i < ads.length ;i++){
         fragmentPins.appendChild(window.pin.renderPin(ads[i]))
       }
       mapPins.appendChild(fragmentPins);
     },
+    showPinsWithoutFilter: function(data){
+      window.dataPins = data;
+      window.pin.renderPins(window.dataPins)
+    },
     showPins: function () {
       map.classList.remove('map--faded');
-      window.backend.load(window.pin.renderPins,window.pin.showErrorMessage);
+      window.backend.load(window.pin.showPinsWithoutFilter,window.pin.showErrorMessage);
       noticeForm.classList.remove('notice__form--disabled');
     }
   };
+
+
 })();

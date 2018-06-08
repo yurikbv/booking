@@ -9,7 +9,7 @@
     var mapPins = document.querySelectorAll('.map__pin');
     for(var i = 0;i < mapPins.length; i++) {
       if (mapPins[i].classList.contains('map__pin--active')){
-        return --i
+        return i;
       }
     }
   };
@@ -20,6 +20,17 @@
       li.className = 'feature  feature--' + features[i];
       place.appendChild(li)
     }
+  };
+
+  var renderPhotos = function(clone,photos,parent){
+    photos.forEach(function (item) {
+      var li = document.createElement('li');
+      var img = document.createElement('img');
+      img.src = item;
+      li.appendChild(img);
+      parent.appendChild(li)
+    });
+    return parent.innerHTML;
   };
 
   window.card = {
@@ -35,6 +46,7 @@
       clone.children[6].textContent = obj.offer.rooms + ' для ' + obj.offer.guests + ' гостей';
       clone.children[7].textContent = 'Заезд после ' + obj.offer.checkin + ', выезд до ' + obj.offer.checkout;
       clone.children[9].textContent = obj.offer.description;
+      // clone.querySelector('.popup__pictures').innerHTML = renderPhotos(clone,obj.offer.photos,clone.querySelector('.popup__pictures'));
       features.innerHTML = '';
       renderFeatures(obj.offer.features,features);
       map.appendChild(clone);

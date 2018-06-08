@@ -25,7 +25,7 @@
     if(target.classList.contains('map__pin--main')){
       return false;
     } else {
-      window.backend.load(window.card.renderCard,window.pin.showErrorMessage);
+      window.card.renderCard(window.newData || window.dataPins);
     }
     document.addEventListener('keydown',onEscPress)
   };
