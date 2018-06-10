@@ -6,6 +6,7 @@
   var mapPins = document.querySelector('.map__pins');
   var noticeForm = document.querySelector('.notice__form');
   var map = document.body.querySelector('.map');
+  var myPin = map.querySelector('.map__pin--main');
 
   var filterType = document.querySelector('#housing-type');
   var filterPrice = document.querySelector('#housing-price');
@@ -16,6 +17,9 @@
 
   var cleanPins = function(pins){
     pins.forEach(function (item) {
+      if(item.contains(myPin)){
+        return false;
+      }
       mapPins.removeChild(item);
     })
   };
@@ -76,6 +80,7 @@
     },
     showPinsWithoutFilter: function(data){
       window.dataPins = data;
+      // window.dataPins.push(myPin);
       window.pin.renderPins(window.dataPins)
     },
     showPins: function () {
